@@ -1,6 +1,7 @@
 package simpledb.storage;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 
@@ -14,6 +15,7 @@ public class Tuple implements Serializable {
     private static final long serialVersionUID = 1L;
     private TupleDesc td;
     private RecordId recordId;
+    private ArrayList<Field> list = new ArrayList<>();
     /**
      * Create a new tuple with the specified schema (type).
      *
@@ -67,6 +69,8 @@ public class Tuple implements Serializable {
      */
     public void setField(int i, Field f) {
         // some code goes here
+        list.add(i, f);
+
     }
 
     /**
@@ -76,8 +80,8 @@ public class Tuple implements Serializable {
      *            field index to return. Must be a valid index.
      */
     public Field getField(int i) {
-        // some code goes here
-        return null;
+        // some code goes here;
+        return list.get(i);
     }
 
     /**
@@ -100,7 +104,7 @@ public class Tuple implements Serializable {
     public Iterator<Field> fields()
     {
         // some code goes here
-        return null;
+        return list.iterator();
     }
 
     /**
@@ -109,5 +113,6 @@ public class Tuple implements Serializable {
     public void resetTupleDesc(TupleDesc td)
     {
         // some code goes here
+        td = null;
     }
 }
