@@ -85,7 +85,13 @@ public class BufferPool {
     	if (pages.contains(pid)) {
     		requestedPage = pages.get(pid);
     	} else {
-    		requestedPage = null;
+    		// if the buffer pool is full
+    		if (pages.size() == pageSize) {
+    			throw new DbException("");
+    		}
+    		// add page to buffer pool
+    	    requestedPage = Database.getCatalog().getDatabaseFile(pid.getTableId()).readPage(pid);
+    	    pages.put(pid, requestedPage);
     	}
     	
         return requestedPage;
