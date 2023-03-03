@@ -165,6 +165,7 @@ simpledb.execution.Predicate
 ||:simpledb.storage.HeapPage
 java.lang.Throwable
 java.io.DataInputStream
+java.util.Arrays
 java.io.ByteArrayOutputStream
 java.lang.System
 [B
@@ -179,11 +180,13 @@ java.util.NoSuchElementException
 java.text.ParseException
 java.lang.Byte
 simpledb.storage.HeapPage
+java.io.PrintStream
 simpledb.common.DbException
 simpledb.common.Type
 simpledb.storage.Tuple
 java.io.IOException
 simpledb.storage.Field
+java.util.List
 simpledb.storage.HeapPageId
 simpledb.storage.RecordId
 simpledb.common.Catalog
@@ -836,9 +839,14 @@ java.lang.Object
 java.io.IOException
 simpledb.transaction.TransactionAbortedException
 ||:simpledb.storage.RecordId
-java.lang.UnsupportedOperationException
+simpledb.storage.PageId
+java.lang.invoke.MethodHandles$Lookup
 simpledb.storage.RecordId
+java.lang.invoke.MethodHandles
 java.lang.Object
+java.lang.String
+java.lang.invoke.StringConcatFactory
+java.lang.Integer
 java.io.Serializable
 ||:simpledb.JoinTest
 simpledb.systemtest.SimpleDbTestBase
