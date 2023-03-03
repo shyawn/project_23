@@ -8,6 +8,7 @@ import simpledb.transaction.TransactionAbortedException;
 import simpledb.transaction.TransactionId;
 
 import java.io.*;
+import java.nio.Buffer;
 import java.util.*;
 
 /**
@@ -59,7 +60,8 @@ public class HeapFile implements DbFile {
      */
     public int getId() {
         // some code goes here
-        throw new UnsupportedOperationException("implement this");
+        return file.getAbsoluteFile().hashCode();
+        //throw new UnsupportedOperationException("implement this");
     }
 
     /**
@@ -73,8 +75,23 @@ public class HeapFile implements DbFile {
     }
 
     // see DbFile.java for javadocs
-    public Page readPage(PageId pid) {
+    public Page readPage(PageId pid){
         // some code goes here
+        // return Database.getCatalog().getDatabaseFile(pid.getTableId()).readPage(pid);
+        try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
+            // long pos = pid.getPageNumber() * (long) BufferPool.getPageSize();
+            int offset = BufferPool.getPageSize() * pid.getPageNumber();
+            byte[] data = new byte[BufferPool.getPageSize()];
+            if (offset + BufferPool.getPageSize() > this.file.length()) {
+                System.err.println("Page offset exceeds max size, error!");
+                System.exit(1);
+            }
+            raf.seek(offset);
+            raf.readFully(data);
+            raf.close();
+
+            return new HeapPage((HeapPageId) pid, data);
+        } catch (Exception e) {}
         return null;
     }
 
@@ -89,7 +106,9 @@ public class HeapFile implements DbFile {
      */
     public int numPages() {
         // some code goes here
-        return 0;
+        // return tupleDesc.numFields();
+        return (int) this.file.length() / BufferPool.getPageSize();
+
     }
 
     // see DbFile.java for javadocs
@@ -108,10 +127,93 @@ public class HeapFile implements DbFile {
         // not necessary for lab1
     }
 
+    private class HeapFileIterator implements DbFileIterator {
+        
+        // private static final long serialVersionUID = 1L;
+        private int curPage = 0;
+        private Iterator<Tuple> curItr = null;
+        private TransactionId tid;
+        private boolean open = false;;
+        
+        public HeapFileIterator(TransactionId tid) {
+            this.tid = tid;
+        }
+        
+        @Override
+        public void open() throws DbException, TransactionAbortedException {
+            open = true;
+            curPage = 0;
+            if (curPage >= numPages()) {
+                return;
+            }
+            curItr = ((HeapPage) Database.getBufferPool().getPage(tid,
+                    new HeapPageId(getId(), curPage), Permissions.READ_ONLY))
+                    .iterator();
+            advance();
+        }
+
+        private void advance() throws DbException, TransactionAbortedException {
+            while (!curItr.hasNext()) {
+                curPage++;
+                if (curPage < numPages()) {
+                    curItr = ((HeapPage) Database.getBufferPool().getPage(tid,
+                            new HeapPageId(getId(), curPage),
+                            Permissions.READ_ONLY)).iterator();
+                } else {
+                    break;
+                }
+            }
+        }
+
+        @Override
+        public boolean hasNext() throws DbException,
+                TransactionAbortedException {
+            if (!open) {
+                return false;
+            }
+            return curPage < numPages();
+        }
+
+        @Override
+        public Tuple next() throws DbException, TransactionAbortedException,
+                NoSuchElementException {
+            if (!open) {
+                throw new NoSuchElementException("iterator not open.");
+            }
+            if (!hasNext()) {
+                throw new NoSuchElementException("No more tuples.");
+            }
+            Tuple result = curItr.next();
+            advance();
+            return result;
+        }
+
+        @Override
+        public void rewind() throws DbException, TransactionAbortedException {
+            if (!open) {
+                throw new DbException("iterator not open yet.");
+            }
+            close();
+            open();          
+        }
+
+        @Override
+        public void close() {
+            curItr = null;
+            curPage = 0;
+            open = false;
+        }
+
+    }
+
     // see DbFile.java for javadocs
     public DbFileIterator iterator(TransactionId tid) {
         // some code goes here
-        return null;
+        // int tableid = Database.getCatalog().getTableId(file.getName());
+        // PageId pid = Database.getCatalog().getDatabaseFile(tableid).get;
+        // return Database.getBufferPool().getPage(tid, pid, null);
+        // return null;
+        return new HeapFileIterator(tid);
     }
 
 }
