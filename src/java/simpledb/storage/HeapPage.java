@@ -88,7 +88,6 @@ public class HeapPage implements Page {
      */
     private int getHeaderSize() {        
         // some code goes here
-        // return 0;
         double headerSize = Math.ceil(this.numSlots / 8);
         return (int) headerSize;
     }
@@ -311,19 +310,10 @@ public class HeapPage implements Page {
      */
     public boolean isSlotUsed(int i) {
         // some code goes here
-        // return false;
-        // return !Objects.isNull(tuples[i]);
-        // System.out.println(header);
-        // return this.header[i] == 1;
         double byteIdx = Math.floor(i / 8);
-        // double headerByte = this.header[(int) byteIdx];
         int bitIdx = i % 8;
-        // System.out.println(header[(int) byteIdx]);
-
         int shifted = header[(int) byteIdx] >> bitIdx & 1;
-
         return shifted == 1;
-        // return false;
     }
 
     /**
@@ -340,8 +330,14 @@ public class HeapPage implements Page {
      */
     public Iterator<Tuple> iterator() {
         // some code goes here
-        Iterator<Tuple> tupleIterator = Arrays.asList(tuples).iterator();
-        
+        ArrayList<Tuple> newTuples = new ArrayList<>();
+        for (int i = 0; i<tuples.length; i++){
+            if (isSlotUsed(i)){
+                newTuples.add(tuples[i]);
+            }
+        }
+
+        Iterator<Tuple> tupleIterator = newTuples.iterator();
         return tupleIterator;
     }
 

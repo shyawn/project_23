@@ -165,12 +165,12 @@ simpledb.execution.Predicate
 ||:simpledb.storage.HeapPage
 java.lang.Throwable
 java.io.DataInputStream
-java.util.Arrays
 java.io.ByteArrayOutputStream
 java.lang.System
 [B
 simpledb.storage.TupleDesc
 simpledb.storage.Page
+java.util.ArrayList
 simpledb.storage.BufferPool
 java.io.ByteArrayInputStream
 java.io.DataOutputStream
@@ -186,7 +186,6 @@ simpledb.common.Type
 simpledb.storage.Tuple
 java.io.IOException
 simpledb.storage.Field
-java.util.List
 simpledb.storage.HeapPageId
 simpledb.storage.RecordId
 simpledb.common.Catalog
