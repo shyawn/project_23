@@ -301,7 +301,7 @@ public class HeapPage implements Page {
     public boolean isSlotUsed(int i) {
         // some code goes here
         // return false;
-        return tuples[i] != null;
+        return !Objects.isNull(tuples[i]);
     }
 
     /**
