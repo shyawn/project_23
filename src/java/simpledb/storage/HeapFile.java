@@ -129,9 +129,9 @@ public class HeapFile implements DbFile {
     private class HeapFileIterator implements DbFileIterator {
         
         private int currentPage;
-        private Iterator<Tuple> curItr;
+        private Iterator<Tuple> currentIterator;
         private TransactionId tid;
-        private boolean open = false;
+        private boolean isOpen = false;
         
         public HeapFileIterator(TransactionId tid) {
             this.tid = tid;
@@ -139,22 +139,22 @@ public class HeapFile implements DbFile {
         
         @Override
         public void open() throws DbException, TransactionAbortedException {
-            open = true;
+            isOpen = true;
             currentPage = 0;
             if (currentPage >= numPages()) {
                 return;
             }
-            curItr = ((HeapPage) Database.getBufferPool().getPage(tid,
+            currentIterator = ((HeapPage) Database.getBufferPool().getPage(tid,
                     new HeapPageId(getId(), currentPage), Permissions.READ_ONLY))
                     .iterator();
             advance();
         }
 
         private void advance() throws DbException, TransactionAbortedException {
-            while (!curItr.hasNext()) {
+            while (!currentIterator.hasNext()) {
                 currentPage++;
                 if (currentPage < numPages()) {
-                    curItr = ((HeapPage) Database.getBufferPool().getPage(tid,
+                    currentIterator = ((HeapPage) Database.getBufferPool().getPage(tid,
                             new HeapPageId(getId(), currentPage),
                             Permissions.READ_ONLY)).iterator();
                 } else {
@@ -166,7 +166,7 @@ public class HeapFile implements DbFile {
         @Override
         public boolean hasNext() throws DbException,
                 TransactionAbortedException {
-            if (!open) {
+            if (!isOpen) {
                 return false;
             }
             return currentPage < numPages();
@@ -175,20 +175,20 @@ public class HeapFile implements DbFile {
         @Override
         public Tuple next() throws DbException, TransactionAbortedException,
                 NoSuchElementException {
-            if (!open) {
+            if (!isOpen) {
                 throw new NoSuchElementException("iterator not open.");
             }
             if (!hasNext()) {
                 throw new NoSuchElementException("No more tuples.");
             }
-            Tuple result = curItr.next();
+            Tuple result = currentIterator.next();
             advance();
             return result;
         }
 
         @Override
         public void rewind() throws DbException, TransactionAbortedException {
-            if (!open) {
+            if (!isOpen) {
                 throw new DbException("iterator not open yet.");
             }
             close();
@@ -197,9 +197,9 @@ public class HeapFile implements DbFile {
 
         @Override
         public void close() {
-            curItr = null;
+            currentIterator = null;
             currentPage = 0;
-            open = false;
+            isOpen = false;
         }
 
     }
