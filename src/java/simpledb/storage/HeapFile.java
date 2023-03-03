@@ -60,8 +60,7 @@ public class HeapFile implements DbFile {
      */
     public int getId() {
         // some code goes here
-        return file.getAbsoluteFile().hashCode();
-        //throw new UnsupportedOperationException("implement this");
+    	return this.file.getAbsoluteFile().hashCode();
     }
 
     /**
@@ -106,9 +105,7 @@ public class HeapFile implements DbFile {
      */
     public int numPages() {
         // some code goes here
-        // return tupleDesc.numFields();
-        return (int) this.file.length() / BufferPool.getPageSize();
-
+    	return (int) Math.ceil(this.file.length() / BufferPool.getPageSize());
     }
 
     // see DbFile.java for javadocs
