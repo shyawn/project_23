@@ -76,21 +76,23 @@ public class HeapFile implements DbFile {
     // see DbFile.java for javadocs
     public Page readPage(PageId pid){
         // some code goes here
-        // return Database.getCatalog().getDatabaseFile(pid.getTableId()).readPage(pid);
         try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
-            // long pos = pid.getPageNumber() * (long) BufferPool.getPageSize();
             int offset = BufferPool.getPageSize() * pid.getPageNumber();
             byte[] data = new byte[BufferPool.getPageSize()];
-            if (offset + BufferPool.getPageSize() > this.file.length()) {
-                System.err.println("Page offset exceeds max size, error!");
-                System.exit(1);
+            
+            // if the offset exceeds the file length
+            if (offset < 0 || offset >= this.file.length()) {
+                throw new Exception("Page does not exist");
             }
+            
             raf.seek(offset);
             raf.readFully(data);
             raf.close();
 
             return new HeapPage((HeapPageId) pid, data);
+            
         } catch (Exception e) {}
+        
         return null;
     }
 
