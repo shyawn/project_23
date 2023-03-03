@@ -34,7 +34,7 @@ public class RecordId implements Serializable {
      */
     public int getTupleNumber() {
         // some code goes here
-        return 0;
+        return this.tupleNumber;
     }
 
     /**
@@ -42,7 +42,7 @@ public class RecordId implements Serializable {
      */
     public PageId getPageId() {
         // some code goes here
-        return null;
+        return this.pageId;
     }
 
     /**
@@ -54,6 +54,10 @@ public class RecordId implements Serializable {
     @Override
     public boolean equals(Object o) {
         // some code goes here
+    	if (o instanceof RecordId) {
+    		RecordId testObject = (RecordId) o;
+    		
+    	}
         throw new UnsupportedOperationException("implement this");
     }
 

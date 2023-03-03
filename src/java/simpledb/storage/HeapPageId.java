@@ -1,6 +1,7 @@
 package simpledb.storage;
 
-import org.hamcrest.core.IsInstanceOf;
+// unable to get it working
+// import org.hamcrest.core.IsInstanceOf;
 
 /** Unique identifier for HeapPage objects. */
 public class HeapPageId implements PageId {
