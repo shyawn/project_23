@@ -318,8 +318,6 @@ public class HeapPage implements Page {
      */
     public Iterator<Tuple> iterator() {
         // some code goes here
-        // Iterator<TDItem> tdItemIterator = tdItems.iterator();
-    	// return tdItemIterator;
         Iterator<Tuple> tupleIterator = Arrays.asList(tuples).iterator();
         
         return tupleIterator;
