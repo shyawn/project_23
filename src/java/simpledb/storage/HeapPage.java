@@ -320,8 +320,9 @@ public class HeapPage implements Page {
         // some code goes here
         // Iterator<TDItem> tdItemIterator = tdItems.iterator();
     	// return tdItemIterator;
-        // Iterator<Tuple> tupleIterator = tuples.iterator();
-        return null;
+        Iterator<Tuple> tupleIterator = Arrays.asList(tuples).iterator();
+        
+        return tupleIterator;
     }
 
 }
