@@ -11,7 +11,7 @@ import java.util.*;
 public class TupleDesc implements Serializable {
 	
 	// introduced the attribute tdItems which is an ArrayList that stores all the TDItems
-	ArrayList<TDItem> tdItems = new ArrayList<TDItem>();
+	private ArrayList<TDItem> tdItems = new ArrayList<TDItem>();
 
     /**
      * A help class to facilitate organizing the information of each field

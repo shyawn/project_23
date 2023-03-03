@@ -25,6 +25,8 @@ public class RecordId implements Serializable {
      */
     public RecordId(PageId pid, int tupleno) {
         // some code goes here
+    	this.pageId = pid;
+    	this.tupleNumber = tupleno;
     }
 
     /**

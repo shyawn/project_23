@@ -34,7 +34,7 @@ public class BufferPool {
     public static final int DEFAULT_PAGES = 50;
 
     // introduced the attribute pages to store all the Pages in a ConcurrentHashMap
-    public static ConcurrentHashMap<PageId, Page> pages;
+    private ConcurrentHashMap<PageId, Page> pages;
     
     /**
      * Creates a BufferPool that caches up to numPages pages.
@@ -43,7 +43,7 @@ public class BufferPool {
      */
     public BufferPool(int numPages) {
         // some code goes here
-    	BufferPool.pages = new ConcurrentHashMap<PageId, Page>();
+    	this.pages = new ConcurrentHashMap<PageId, Page>();
     	BufferPool.pageSize = numPages;
     	
     }

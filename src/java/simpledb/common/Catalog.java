@@ -47,13 +47,13 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Catalog {
 	
 	// introduced ConcurrentHashMaps to assign data to specific tableId
-    ConcurrentHashMap<Integer, DbFile> file_name = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Integer, DbFile> file_name = new ConcurrentHashMap<>();
 
-    ConcurrentHashMap<String, Integer> table_name = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, Integer> table_name = new ConcurrentHashMap<>();
 
-    ConcurrentHashMap<Integer, String> table_name1 = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Integer, String> table_name1 = new ConcurrentHashMap<>();
 
-    ConcurrentHashMap<Integer, String> pkey_name = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Integer, String> pkey_name = new ConcurrentHashMap<>();
 
     /**
 
