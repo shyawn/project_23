@@ -7,6 +7,10 @@ import java.io.Serializable;
  * specific table.
  */
 public class RecordId implements Serializable {
+	
+	// introduced attributes to store PageId and tupleno
+	private PageId pageId;
+	private int tupleNumber;
 
     private static final long serialVersionUID = 1L;
 

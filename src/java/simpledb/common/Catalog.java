@@ -45,6 +45,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 
 public class Catalog {
+	
 	// introduced ConcurrentHashMaps to assign data to specific tableId
     ConcurrentHashMap<Integer, DbFile> file_name = new ConcurrentHashMap<>();
 
