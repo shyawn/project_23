@@ -33,7 +33,7 @@ public class BufferPool {
     constructor instead. */
     public static final int DEFAULT_PAGES = 50;
 
-    // created an attribute pages to store Pages in a ConcurrentHashMap
+    // introduced the attribute pages to store all the Pages in a ConcurrentHashMap
     public static ConcurrentHashMap<PageId, Page> pages;
     
     /**

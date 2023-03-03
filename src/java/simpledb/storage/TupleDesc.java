@@ -10,7 +10,7 @@ import java.util.*;
  */
 public class TupleDesc implements Serializable {
 	
-	// created the attribute tdItems which is an ArrayList that stores all the TDItems
+	// introduced the attribute tdItems which is an ArrayList that stores all the TDItems
 	ArrayList<TDItem> tdItems = new ArrayList<TDItem>();
 
     /**
