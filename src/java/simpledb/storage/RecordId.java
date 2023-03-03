@@ -34,7 +34,7 @@ public class RecordId implements Serializable {
      */
     public int getTupleNumber() {
         // some code goes here
-        return 0;
+        return this.tupleNumber;
     }
 
     /**
@@ -42,7 +42,7 @@ public class RecordId implements Serializable {
      */
     public PageId getPageId() {
         // some code goes here
-        return null;
+        return this.pageId;
     }
 
     /**
@@ -54,7 +54,21 @@ public class RecordId implements Serializable {
     @Override
     public boolean equals(Object o) {
         // some code goes here
-        throw new UnsupportedOperationException("implement this");
+    	boolean result = true;
+    	
+    	if (o instanceof RecordId) {
+    		RecordId testObject = (RecordId) o;
+    		
+    		// they are not equal if they do not have the same hashcode
+    		if (testObject.hashCode() != this.hashCode()) {
+    			result = false;
+    		}
+    		
+    	} else {
+    		result = false;
+    	}
+    	
+    	return result;
     }
 
     /**
@@ -66,8 +80,11 @@ public class RecordId implements Serializable {
     @Override
     public int hashCode() {
         // some code goes here
-        throw new UnsupportedOperationException("implement this");
-
+    	int pageIdHashCode = this.pageId.hashCode();
+    	int tupleNumberHashCode = Integer.toString(this.tupleNumber).hashCode();
+    	int recordIdHashCode = Integer.parseInt(Integer.toString(pageIdHashCode) + Integer.toString(tupleNumberHashCode));
+    	
+    	return recordIdHashCode;
     }
 
 }
