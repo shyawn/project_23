@@ -128,11 +128,10 @@ public class HeapFile implements DbFile {
 
     private class HeapFileIterator implements DbFileIterator {
         
-        // private static final long serialVersionUID = 1L;
-        private int curPage = 0;
-        private Iterator<Tuple> curItr = null;
+        private int currentPage;
+        private Iterator<Tuple> curItr;
         private TransactionId tid;
-        private boolean open = false;;
+        private boolean open = false;
         
         public HeapFileIterator(TransactionId tid) {
             this.tid = tid;
@@ -141,22 +140,22 @@ public class HeapFile implements DbFile {
         @Override
         public void open() throws DbException, TransactionAbortedException {
             open = true;
-            curPage = 0;
-            if (curPage >= numPages()) {
+            currentPage = 0;
+            if (currentPage >= numPages()) {
                 return;
             }
             curItr = ((HeapPage) Database.getBufferPool().getPage(tid,
-                    new HeapPageId(getId(), curPage), Permissions.READ_ONLY))
+                    new HeapPageId(getId(), currentPage), Permissions.READ_ONLY))
                     .iterator();
             advance();
         }
 
         private void advance() throws DbException, TransactionAbortedException {
             while (!curItr.hasNext()) {
-                curPage++;
-                if (curPage < numPages()) {
+                currentPage++;
+                if (currentPage < numPages()) {
                     curItr = ((HeapPage) Database.getBufferPool().getPage(tid,
-                            new HeapPageId(getId(), curPage),
+                            new HeapPageId(getId(), currentPage),
                             Permissions.READ_ONLY)).iterator();
                 } else {
                     break;
@@ -170,7 +169,7 @@ public class HeapFile implements DbFile {
             if (!open) {
                 return false;
             }
-            return curPage < numPages();
+            return currentPage < numPages();
         }
 
         @Override
@@ -199,7 +198,7 @@ public class HeapFile implements DbFile {
         @Override
         public void close() {
             curItr = null;
-            curPage = 0;
+            currentPage = 0;
             open = false;
         }
 
