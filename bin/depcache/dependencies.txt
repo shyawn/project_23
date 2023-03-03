@@ -275,6 +275,8 @@ java.io.Serializable
 java.lang.UnsupportedOperationException
 simpledb.storage.Tuple
 java.lang.Object
+simpledb.storage.Field
+java.util.ArrayList
 java.io.Serializable
 ||:simpledb.systemtest.JoinTest
 simpledb.systemtest.SimpleDbTestBase
@@ -820,10 +822,14 @@ simpledb.execution.Predicate$Op
 java.io.Serializable
 simpledb.execution.Predicate
 ||:simpledb.storage.HeapPageId
-java.lang.UnsupportedOperationException
 simpledb.storage.PageId
 simpledb.storage.HeapPageId
 java.lang.Object
+<<<<<<< Updated upstream
+=======
+java.lang.String
+java.lang.Integer
+>>>>>>> Stashed changes
 ||:simpledb.storage.HeapFile
 java.lang.UnsupportedOperationException
 simpledb.common.DbException

@@ -1,5 +1,7 @@
 package simpledb.storage;
 
+import org.hamcrest.core.IsInstanceOf;
+
 /** Unique identifier for HeapPage objects. */
 public class HeapPageId implements PageId {
 
@@ -10,14 +12,21 @@ public class HeapPageId implements PageId {
      * @param tableId The table that is being referenced
      * @param pgNo The page number in that table.
      */
+
+    private final int tableId;
+    private final int pgNo;
+
     public HeapPageId(int tableId, int pgNo) {
         // some code goes here
+        this.tableId = tableId;
+        this.pgNo = pgNo;
     }
 
     /** @return the table associated with this PageId */
     public int getTableId() {
         // some code goes here
-        return 0;
+        // return 0;
+        return this.tableId;
     }
 
     /**
@@ -26,7 +35,8 @@ public class HeapPageId implements PageId {
      */
     public int getPageNumber() {
         // some code goes here
-        return 0;
+        // return 0;
+        return this.pgNo;
     }
 
     /**
@@ -37,7 +47,12 @@ public class HeapPageId implements PageId {
      */
     public int hashCode() {
         // some code goes here
-        throw new UnsupportedOperationException("implement this");
+        // Integer a = new Integer(1);
+        // Integer hashTableId = tableId;
+        int hashTableId = Integer.toString(tableId).hashCode();
+        int hashPageNo = Integer.toString(tableId).hashCode();
+        return hashTableId + hashPageNo; 
+        // throw new UnsupportedOperationException("implement this");
     }
 
     /**
@@ -49,6 +64,13 @@ public class HeapPageId implements PageId {
      */
     public boolean equals(Object o) {
         // some code goes here
+        // return false;
+        // return this == o;
+        // return this.serialize() == o.serialize();
+        if (o instanceof HeapPageId){
+            HeapPageId testObject = (HeapPageId) o;
+            return this.tableId == testObject.tableId && this.pgNo == testObject.pgNo;
+        }
         return false;
     }
 
