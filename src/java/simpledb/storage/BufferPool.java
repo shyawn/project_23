@@ -35,6 +35,8 @@ public class BufferPool {
 
     // introduced the attribute pages to store all the Pages in a ConcurrentHashMap
     private ConcurrentHashMap<PageId, Page> pages;
+    // introduced the attribute pageNum to specify the maximum number of pages
+    private int pageNum;
     
     /**
      * Creates a BufferPool that caches up to numPages pages.
@@ -44,7 +46,7 @@ public class BufferPool {
     public BufferPool(int numPages) {
         // some code goes here
     	this.pages = new ConcurrentHashMap<PageId, Page>();
-    	BufferPool.pageSize = numPages;
+    	this.pageNum = numPages;
     	
     }
     
@@ -86,7 +88,7 @@ public class BufferPool {
     		requestedPage = pages.get(pid);
     	} else {
     		// if the buffer pool is full
-    		if (pages.size() == pageSize) {
+    		if (pages.size() == pageNum) {
     			throw new DbException("");
     		}
     		// add page to buffer pool
