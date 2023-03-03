@@ -174,11 +174,11 @@ simpledb.storage.BufferPool
 java.io.ByteArrayInputStream
 java.io.DataOutputStream
 simpledb.common.Database
+java.lang.Math
 java.util.NoSuchElementException
 java.text.ParseException
 java.lang.Byte
 simpledb.storage.HeapPage
-java.lang.UnsupportedOperationException
 simpledb.common.DbException
 simpledb.common.Type
 simpledb.storage.Tuple
@@ -825,11 +825,8 @@ simpledb.execution.Predicate
 simpledb.storage.PageId
 simpledb.storage.HeapPageId
 java.lang.Object
-<<<<<<< Updated upstream
-=======
 java.lang.String
 java.lang.Integer
->>>>>>> Stashed changes
 ||:simpledb.storage.HeapFile
 java.lang.UnsupportedOperationException
 simpledb.common.DbException

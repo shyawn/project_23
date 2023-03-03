@@ -8,6 +8,7 @@ import simpledb.transaction.TransactionId;
 
 import java.util.*;
 import java.io.*;
+import java.lang.Math;
 
 /**
  * Each instance of HeapPage stores data for one page of HeapFiles and 
@@ -73,8 +74,9 @@ public class HeapPage implements Page {
     */
     private int getNumTuples() {        
         // some code goes here
-        return 0;
-
+        int tupleSize = this.td.getSize();
+        double numTuples = Math.floor(BufferPool.getPageSize()*8) / (tupleSize * 8 + 1);
+        return (int) numTuples;
     }
 
     /**
@@ -82,10 +84,10 @@ public class HeapPage implements Page {
      * @return the number of bytes in the header of a page in a HeapFile with each tuple occupying tupleSize bytes
      */
     private int getHeaderSize() {        
-        
         // some code goes here
-        return 0;
-                 
+        // return 0;
+        double headerSize = Math.ceil(this.numSlots / 8);
+        return (int) headerSize;
     }
     
     /** Return a view of this page before it was modified
@@ -118,7 +120,8 @@ public class HeapPage implements Page {
      */
     public HeapPageId getId() {
     // some code goes here
-    throw new UnsupportedOperationException("implement this");
+    // throw new UnsupportedOperationException("implement this");
+        return this.pid;
     }
 
     /**
@@ -289,6 +292,7 @@ public class HeapPage implements Page {
     public int getNumEmptySlots() {
         // some code goes here
         return 0;
+
     }
 
     /**
@@ -296,7 +300,8 @@ public class HeapPage implements Page {
      */
     public boolean isSlotUsed(int i) {
         // some code goes here
-        return false;
+        // return false;
+        return tuples[i] != null;
     }
 
     /**
@@ -313,6 +318,9 @@ public class HeapPage implements Page {
      */
     public Iterator<Tuple> iterator() {
         // some code goes here
+        // Iterator<TDItem> tdItemIterator = tdItems.iterator();
+    	// return tdItemIterator;
+        // Iterator<Tuple> tupleIterator = tuples.iterator();
         return null;
     }
 
