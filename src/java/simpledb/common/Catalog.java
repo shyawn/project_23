@@ -47,13 +47,13 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Catalog {
 	
 	// introduced ConcurrentHashMaps to assign data to specific tableId
-    private ConcurrentHashMap<Integer, DbFile> file_name;
+    private ConcurrentHashMap<Integer, DbFile> fileIdtofile;
 
-    private ConcurrentHashMap<String, Integer> table_name;
+    private ConcurrentHashMap<String, Integer> fileNametoFileId;
 
-    private ConcurrentHashMap<Integer, String> table_name1;
+    private ConcurrentHashMap<Integer, String> fileIdtoFileName;
 
-    private ConcurrentHashMap<Integer, String> pkey_name;
+    private ConcurrentHashMap<Integer, String> fileIdtoPkeyField;
 
     /**
 
@@ -66,10 +66,10 @@ public class Catalog {
     public Catalog() {
 
         // some code goes here
-    	file_name = new ConcurrentHashMap<>();
-    	table_name = new ConcurrentHashMap<>();
-    	table_name1 = new ConcurrentHashMap<>();
-    	pkey_name = new ConcurrentHashMap<>();
+    	fileIdtofile = new ConcurrentHashMap<>();
+    	fileNametoFileId = new ConcurrentHashMap<>();
+    	fileIdtoFileName = new ConcurrentHashMap<>();
+    	fileIdtoPkeyField = new ConcurrentHashMap<>();
 
     }
 
@@ -97,15 +97,15 @@ public class Catalog {
 
         // some code goes here
 
-        file_name.put(file.getId(),file);
+        fileIdtofile.put(file.getId(),file);
 
-        table_name.put(name,file.getId());
+        fileNametoFileId.put(name,file.getId());
 
-        table_name1.put(file.getId(),name);
+        fileIdtoFileName.put(file.getId(),name);
 
         if (pkeyField != ""){
 
-            pkey_name.put(file.getId(),pkeyField);
+            fileIdtoPkeyField.put(file.getId(),pkeyField);
 
         }
         
@@ -161,9 +161,9 @@ public class Catalog {
 
         try{
 
-            if (table_name.containsKey(name)) {
+            if (fileNametoFileId.containsKey(name)) {
 
-                requested_table_id = table_name.get(name);
+                requested_table_id = fileNametoFileId.get(name);
 
             }
 
@@ -204,7 +204,7 @@ public class Catalog {
     public TupleDesc getTupleDesc(int tableid) throws NoSuchElementException {
 
         // some code goes here
-    	DbFile file = file_name.get(tableid);
+    	DbFile file = fileIdtofile.get(tableid);
     	
     	if (Objects.isNull(file)) {
     		throw new NoSuchElementException();
@@ -231,7 +231,7 @@ public class Catalog {
     public DbFile getDatabaseFile(int tableid) throws NoSuchElementException {
 
         // some code goes here
-        DbFile file = file_name.get(tableid);
+        DbFile file = fileIdtofile.get(tableid);
         
         if (Objects.isNull(file)) {
         	throw new NoSuchElementException("table doesn't exist.");
@@ -247,7 +247,7 @@ public class Catalog {
 
         // some code goes here
 
-        return pkey_name.get(tableid);
+        return fileIdtoPkeyField.get(tableid);
 
     }
 
@@ -257,7 +257,7 @@ public class Catalog {
 
         // some code goes here
 
-        return table_name1.keySet().iterator();
+        return fileIdtoFileName.keySet().iterator();
 
     }
 
@@ -267,7 +267,7 @@ public class Catalog {
 
         // some code goes here
 
-        return table_name1.get(id);
+        return fileIdtoFileName.get(id);
 
     }
 
@@ -279,13 +279,13 @@ public class Catalog {
 
         // some code goes here
 
-        file_name.clear();
+        fileIdtofile.clear();
 
-        table_name.clear();
+        fileNametoFileId.clear();
 
-        table_name1.clear();
+        fileIdtoFileName.clear();
 
-        pkey_name.clear();
+        fileIdtoPkeyField.clear();
 
     }
 
