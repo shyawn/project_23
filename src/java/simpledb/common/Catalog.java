@@ -47,7 +47,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Catalog {
 	
 	// introduced ConcurrentHashMaps to assign data to specific tableId
-    private ConcurrentHashMap<Integer, DbFile> fileIdtofile;
+    private ConcurrentHashMap<Integer, DbFile> fileIdtoFile;
 
     private ConcurrentHashMap<String, Integer> fileNametoFileId;
 
@@ -66,7 +66,7 @@ public class Catalog {
     public Catalog() {
 
         // some code goes here
-    	fileIdtofile = new ConcurrentHashMap<>();
+    	fileIdtoFile = new ConcurrentHashMap<>();
     	fileNametoFileId = new ConcurrentHashMap<>();
     	fileIdtoFileName = new ConcurrentHashMap<>();
     	fileIdtoPKeyField = new ConcurrentHashMap<>();
@@ -97,7 +97,7 @@ public class Catalog {
 
         // some code goes here
 
-        fileIdtofile.put(file.getId(),file);
+        fileIdtoFile.put(file.getId(),file);
 
         fileNametoFileId.put(name,file.getId());
 
@@ -204,7 +204,7 @@ public class Catalog {
     public TupleDesc getTupleDesc(int tableid) throws NoSuchElementException {
 
         // some code goes here
-    	DbFile file = fileIdtofile.get(tableid);
+    	DbFile file = fileIdtoFile.get(tableid);
     	
     	if (Objects.isNull(file)) {
     		throw new NoSuchElementException();
@@ -231,7 +231,7 @@ public class Catalog {
     public DbFile getDatabaseFile(int tableid) throws NoSuchElementException {
 
         // some code goes here
-        DbFile file = fileIdtofile.get(tableid);
+        DbFile file = fileIdtoFile.get(tableid);
         
         if (Objects.isNull(file)) {
         	throw new NoSuchElementException("table doesn't exist.");
@@ -279,7 +279,7 @@ public class Catalog {
 
         // some code goes here
 
-        fileIdtofile.clear();
+        fileIdtoFile.clear();
 
         fileNametoFileId.clear();
 
