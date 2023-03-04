@@ -2552,6 +2552,7 @@ simpledb.storage.TupleDesc$TDItem
 java.lang.invoke.MethodHandles
 simpledb.storage.TupleDesc
 [Ljava.lang.String;
+java.lang.Exception
 simpledb.storage.DbFileIterator
 simpledb.execution.OpIterator
 simpledb.storage.DbFile
