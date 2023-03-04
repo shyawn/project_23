@@ -47,13 +47,13 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Catalog {
 	
 	// introduced ConcurrentHashMaps to assign data to specific tableId
-    private ConcurrentHashMap<Integer, DbFile> file_name = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Integer, DbFile> file_name;
 
-    private ConcurrentHashMap<String, Integer> table_name = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, Integer> table_name;
 
-    private ConcurrentHashMap<Integer, String> table_name1 = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Integer, String> table_name1;
 
-    private ConcurrentHashMap<Integer, String> pkey_name = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Integer, String> pkey_name;
 
     /**
 
@@ -66,6 +66,10 @@ public class Catalog {
     public Catalog() {
 
         // some code goes here
+    	file_name = new ConcurrentHashMap<>();
+    	table_name = new ConcurrentHashMap<>();
+    	table_name1 = new ConcurrentHashMap<>();
+    	pkey_name = new ConcurrentHashMap<>();
 
     }
 
@@ -99,14 +103,12 @@ public class Catalog {
 
         table_name1.put(file.getId(),name);
 
-
-
         if (pkeyField != ""){
 
             pkey_name.put(file.getId(),pkeyField);
 
         }
-
+        
     }
 
 
@@ -202,10 +204,13 @@ public class Catalog {
     public TupleDesc getTupleDesc(int tableid) throws NoSuchElementException {
 
         // some code goes here
-
-        TupleDesc table_tuple = file_name.get(tableid).getTupleDesc();
-
-        return table_tuple;
+    	DbFile file = file_name.get(tableid);
+    	
+    	if (Objects.isNull(file)) {
+    		throw new NoSuchElementException();
+    	}
+    	
+    	return file.getTupleDesc();
 
     }
 
@@ -226,8 +231,13 @@ public class Catalog {
     public DbFile getDatabaseFile(int tableid) throws NoSuchElementException {
 
         // some code goes here
-
-        return file_name.get(tableid);
+        DbFile file = file_name.get(tableid);
+        
+        if (Objects.isNull(file)) {
+        	throw new NoSuchElementException("table doesn't exist.");
+        }
+           
+        return file;
 
     }
 
