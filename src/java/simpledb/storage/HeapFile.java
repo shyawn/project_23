@@ -155,7 +155,7 @@ public class HeapFile implements DbFile {
     		if (currentPage >= numPages()) {
     			return;
     		}
-    		
+            
     		heapPageIterator = ((HeapPage) Database.getBufferPool().getPage(tid,
     				new HeapPageId(getId(), currentPage), Permissions.READ_ONLY)).iterator();
     		
