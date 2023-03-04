@@ -94,7 +94,10 @@ public class BufferPool {
     		}
     		// add page to buffer pool
     	    requestedPage = Database.getCatalog().getDatabaseFile(pid.getTableId()).readPage(pid);    	    
-    	    pageCache.put(pid, requestedPage);
+    	    
+    	    try {
+    	    	pageCache.put(pid, requestedPage);
+    	    } catch (Exception e) {}
     	}
     	
         return requestedPage;
