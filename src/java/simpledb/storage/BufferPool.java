@@ -88,7 +88,7 @@ public class BufferPool {
     	if (pageCache.containsKey(pid)) {
     		requestedPage = pageCache.get(pid);
     	} else {
-    		// first check f the buffer pool is full
+    		// first check if the buffer pool is full
     		if (pageCache.size() == pageLimit) {
     			throw new DbException(""); // not yet implement evictPage()
     		}
