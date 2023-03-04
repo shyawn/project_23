@@ -38,7 +38,6 @@ public class BufferPool {
     // introduced the attribute pageNum to specify the maximum number of pages
     private int pageLimit;
     
-    
     /**
      * Creates a BufferPool that caches up to numPages pages.
      *
@@ -47,8 +46,7 @@ public class BufferPool {
     public BufferPool(int numPages) {
         // some code goes here
     	this.pageCache = new ConcurrentHashMap<PageId, Page>();
-    	this.pageLimit = numPages;
-    	
+    	this.pageLimit = numPages;    	
     }
     
     public static int getPageSize() {
