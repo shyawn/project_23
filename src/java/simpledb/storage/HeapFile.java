@@ -96,9 +96,9 @@ public class HeapFile implements DbFile {
 
             return new HeapPage((HeapPageId) pid, data);
             
-        } catch (Exception e) {
-        	throw new IllegalArgumentException("Page does not exist");
-        }
+        } catch (Exception e) {}
+        
+        return null;
         
     }
 
