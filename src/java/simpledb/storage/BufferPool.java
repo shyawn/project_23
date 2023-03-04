@@ -33,10 +33,11 @@ public class BufferPool {
     constructor instead. */
     public static final int DEFAULT_PAGES = 50;
 
-    // introduced the attribute pages to store all the Pages in a ConcurrentHashMap
-    private ConcurrentHashMap<PageId, Page> pages;
+    // introduced the attribute pageCache to store all the cached Pages in a ConcurrentHashMap
+    private ConcurrentHashMap<PageId, Page> pageCache;
     // introduced the attribute pageNum to specify the maximum number of pages
-    private int pageNum;
+    private int pageLimit;
+    
     
     /**
      * Creates a BufferPool that caches up to numPages pages.
@@ -45,8 +46,8 @@ public class BufferPool {
      */
     public BufferPool(int numPages) {
         // some code goes here
-    	this.pages = new ConcurrentHashMap<PageId, Page>();
-    	this.pageNum = numPages;
+    	this.pageCache = new ConcurrentHashMap<PageId, Page>();
+    	this.pageLimit = numPages;
     	
     }
     
@@ -84,16 +85,16 @@ public class BufferPool {
         // some code goes here
     	Page requestedPage;
     	
-    	if (pages.contains(pid)) {
-    		requestedPage = pages.get(pid);
+    	if (pageCache.containsKey(pid)) {
+    		requestedPage = pageCache.get(pid);
     	} else {
-    		// if the buffer pool is full
-    		if (pages.size() == pageNum) {
-    			throw new DbException("");
+    		// first check f the buffer pool is full
+    		if (pageCache.size() == pageLimit) {
+    			throw new DbException(""); // not yet implement evictPage()
     		}
     		// add page to buffer pool
     	    requestedPage = Database.getCatalog().getDatabaseFile(pid.getTableId()).readPage(pid);
-    	    pages.put(pid, requestedPage);
+    	    pageCache.put(pid, requestedPage);
     	}
     	
         return requestedPage;
