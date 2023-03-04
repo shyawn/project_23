@@ -137,6 +137,10 @@ public class HeapFile implements DbFile {
     		this.tid = tid;
     	}
     	
+    	/**
+         * Opens the iterator
+         * @throws DbException when there are problems opening/accessing the database.
+         */
     	@Override
     	public void open() throws DbException, TransactionAbortedException {
     		isOpen = true;
@@ -149,10 +153,15 @@ public class HeapFile implements DbFile {
     		heapPageIterator = ((HeapPage) Database.getBufferPool().getPage(tid,
     				new HeapPageId(getId(), currentPage), Permissions.READ_ONLY)).iterator();
     		
-    		advance();
+    		// if current page has no more tuples, change heapPageIterator to next page's iterator
+    		if (!heapPageIterator.hasNext()) {
+    			UseNextPageIterator();
+    		}
+    		
     	}
     	
-    	private void advance() throws DbException, TransactionAbortedException {
+    	// function to help get the next page's iterator
+    	private void UseNextPageIterator() throws DbException, TransactionAbortedException {
     		// if current headPageIterator has reached the end of the page
     		while (!heapPageIterator.hasNext()) {
     			// proceed to the next page
@@ -170,6 +179,7 @@ public class HeapFile implements DbFile {
     		}
     	}
     	
+    	/** @return true if there are more tuples available, false if no more tuples or iterator isn't open. */
     	@Override
     	public boolean hasNext() throws DbException, TransactionAbortedException {
     		if (!isOpen) {
@@ -179,10 +189,17 @@ public class HeapFile implements DbFile {
     		return currentPage < numPages();
     	}
     	
+    	/**
+         * Gets the next tuple from the operator (typically implementing by reading
+         * from a child operator or an access method).
+         *
+         * @return The next tuple in the iterator.
+         * @throws NoSuchElementException if there are no more tuples
+         */
     	@Override
     	public Tuple next() throws DbException, TransactionAbortedException, NoSuchElementException {
     		if (!isOpen) {
-    			throw new NoSuchElementException("iterator not open.");
+    			throw new NoSuchElementException("Tterator is not open.");
     		}
     		
     		if (!hasNext()) {
@@ -190,21 +207,32 @@ public class HeapFile implements DbFile {
     		}
     		
     		Tuple result = heapPageIterator.next();
-    		advance();
+    		
+    		// if current page has no more tuples, change heapPageIterator to next page's iterator
+    		if (!heapPageIterator.hasNext()) {
+    			UseNextPageIterator();
+    		}
     		
     		return result;
     	}
     	
+    	/**
+         * Resets the iterator to the start.
+         * @throws DbException When rewind is unsupported.
+         */
     	@Override
     	public void rewind() throws DbException, TransactionAbortedException {
     		if (!isOpen) {
-    			throw new DbException("iterator not open yet.");
+    			throw new DbException("Iterator is not yet open.");
     		}
     		
     		close();
     		open();          
     	}
 
+    	/**
+         * Closes the iterator.
+         */
     	@Override
     	public void close() {
     		heapPageIterator = null;
