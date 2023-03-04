@@ -127,91 +127,96 @@ public class HeapFile implements DbFile {
     }
 
     private class HeapFileIterator implements DbFileIterator {
-        
-        private int currentPage;
-        private Iterator<Tuple> currentIterator;
-        private TransactionId tid;
-        private boolean isOpen = false;
-        
-        public HeapFileIterator(TransactionId tid) {
-            this.tid = tid;
-        }
-        
-        @Override
-        public void open() throws DbException, TransactionAbortedException {
-            isOpen = true;
-            currentPage = 0;
-            if (currentPage >= numPages()) {
-                return;
-            }
-            currentIterator = ((HeapPage) Database.getBufferPool().getPage(tid,
-                    new HeapPageId(getId(), currentPage), Permissions.READ_ONLY))
-                    .iterator();
-            advance();
-        }
+    	
+    	private int currentPage;
+    	private Iterator<Tuple> heapPageIterator;
+    	private TransactionId tid;
+    	private boolean isOpen = false;
+    	
+    	public HeapFileIterator(TransactionId tid) {
+    		this.tid = tid;
+    	}
+    	
+    	@Override
+    	public void open() throws DbException, TransactionAbortedException {
+    		isOpen = true;
+    		currentPage = 0;
+    		
+    		if (currentPage >= numPages()) {
+    			return;
+    		}
+    		
+    		heapPageIterator = ((HeapPage) Database.getBufferPool().getPage(tid,
+    				new HeapPageId(getId(), currentPage), Permissions.READ_ONLY)).iterator();
+    		
+    		advance();
+    	}
+    	
+    	private void advance() throws DbException, TransactionAbortedException {
+    		// if current headPageIterator has reached the end of the page
+    		while (!heapPageIterator.hasNext()) {
+    			// proceed to the next page
+    			currentPage += 1;
+    			
+    			// if the new currentPage number is valid
+    			if (currentPage < numPages()) {
+    				// update heapPageIterator with the new iterator for the new currentPage
+    				heapPageIterator = ((HeapPage) Database.getBufferPool().getPage(tid,
+    						new HeapPageId(getId(), currentPage),
+    						Permissions.READ_ONLY)).iterator();
+    			} else {
+    				break;
+    			}
+    		}
+    	}
+    	
+    	@Override
+    	public boolean hasNext() throws DbException, TransactionAbortedException {
+    		if (!isOpen) {
+    			return false;
+    		}
+    		
+    		return currentPage < numPages();
+    	}
+    	
+    	@Override
+    	public Tuple next() throws DbException, TransactionAbortedException, NoSuchElementException {
+    		if (!isOpen) {
+    			throw new NoSuchElementException("iterator not open.");
+    		}
+    		
+    		if (!hasNext()) {
+    			throw new NoSuchElementException("No more tuples.");
+    		}
+    		
+    		Tuple result = heapPageIterator.next();
+    		advance();
+    		
+    		return result;
+    	}
+    	
+    	@Override
+    	public void rewind() throws DbException, TransactionAbortedException {
+    		if (!isOpen) {
+    			throw new DbException("iterator not open yet.");
+    		}
+    		
+    		close();
+    		open();          
+    	}
 
-        private void advance() throws DbException, TransactionAbortedException {
-            while (!currentIterator.hasNext()) {
-                currentPage++;
-                if (currentPage < numPages()) {
-                    currentIterator = ((HeapPage) Database.getBufferPool().getPage(tid,
-                            new HeapPageId(getId(), currentPage),
-                            Permissions.READ_ONLY)).iterator();
-                } else {
-                    break;
-                }
-            }
-        }
-
-        @Override
-        public boolean hasNext() throws DbException,
-                TransactionAbortedException {
-            if (!isOpen) {
-                return false;
-            }
-            return currentPage < numPages();
-        }
-
-        @Override
-        public Tuple next() throws DbException, TransactionAbortedException,
-                NoSuchElementException {
-            if (!isOpen) {
-                throw new NoSuchElementException("iterator not open.");
-            }
-            if (!hasNext()) {
-                throw new NoSuchElementException("No more tuples.");
-            }
-            Tuple result = currentIterator.next();
-            advance();
-            return result;
-        }
-
-        @Override
-        public void rewind() throws DbException, TransactionAbortedException {
-            if (!isOpen) {
-                throw new DbException("iterator not open yet.");
-            }
-            close();
-            open();          
-        }
-
-        @Override
-        public void close() {
-            currentIterator = null;
-            currentPage = 0;
-            isOpen = false;
-        }
-
+    	@Override
+    	public void close() {
+    		heapPageIterator = null;
+    		currentPage = 0;
+    		isOpen = false;
+    	}
     }
 
     // see DbFile.java for javadocs
     public DbFileIterator iterator(TransactionId tid) {
         // some code goes here
-        // int tableid = Database.getCatalog().getTableId(file.getName());
-        // PageId pid = Database.getCatalog().getDatabaseFile(tableid).get;
-        // return Database.getBufferPool().getPage(tid, pid, null);
-        // return null;
-        return new HeapFileIterator(tid);
+    	return new HeapFileIterator(tid);
     }
 
 }
