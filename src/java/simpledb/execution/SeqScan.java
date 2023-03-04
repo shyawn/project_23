@@ -121,7 +121,7 @@ public class SeqScan implements OpIterator {
     		TupleDesc.TDItem tdItem = tdIterator.next();
     		typeArr[i] = tdItem.fieldType;
     		nameArr[i] = tableAlias + "." + tdItem.fieldName;
-    		i++;
+    		i += 1;
     	}
     	
     	return new TupleDesc(typeArr, nameArr);
