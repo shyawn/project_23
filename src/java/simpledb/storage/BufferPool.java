@@ -93,7 +93,7 @@ public class BufferPool {
     			throw new DbException(""); // not yet implement evictPage()
     		}
     		// add page to buffer pool
-    	    requestedPage = Database.getCatalog().getDatabaseFile(pid.getTableId()).readPage(pid);
+    	    requestedPage = Database.getCatalog().getDatabaseFile(pid.getTableId()).readPage(pid);    	    
     	    pageCache.put(pid, requestedPage);
     	}
     	
