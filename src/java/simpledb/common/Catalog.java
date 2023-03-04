@@ -53,7 +53,7 @@ public class Catalog {
 
     private ConcurrentHashMap<Integer, String> fileIdtoFileName;
 
-    private ConcurrentHashMap<Integer, String> fileIdtoPkeyField;
+    private ConcurrentHashMap<Integer, String> fileIdtoPKeyField;
 
     /**
 
@@ -69,7 +69,7 @@ public class Catalog {
     	fileIdtofile = new ConcurrentHashMap<>();
     	fileNametoFileId = new ConcurrentHashMap<>();
     	fileIdtoFileName = new ConcurrentHashMap<>();
-    	fileIdtoPkeyField = new ConcurrentHashMap<>();
+    	fileIdtoPKeyField = new ConcurrentHashMap<>();
 
     }
 
@@ -105,7 +105,7 @@ public class Catalog {
 
         if (pkeyField != ""){
 
-            fileIdtoPkeyField.put(file.getId(),pkeyField);
+            fileIdtoPKeyField.put(file.getId(),pkeyField);
 
         }
         
@@ -247,7 +247,7 @@ public class Catalog {
 
         // some code goes here
 
-        return fileIdtoPkeyField.get(tableid);
+        return fileIdtoPKeyField.get(tableid);
 
     }
 
@@ -285,7 +285,7 @@ public class Catalog {
 
         fileIdtoFileName.clear();
 
-        fileIdtoPkeyField.clear();
+        fileIdtoPKeyField.clear();
 
     }
 
