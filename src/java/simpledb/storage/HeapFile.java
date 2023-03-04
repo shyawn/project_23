@@ -74,6 +74,11 @@ public class HeapFile implements DbFile {
     }
 
     // see DbFile.java for javadocs
+    /**
+     * Read the specified page from disk.
+     *
+     * @throws IllegalArgumentException if the page does not exist in this file.
+     */
     public Page readPage(PageId pid){
         // some code goes here
         try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
@@ -82,7 +87,7 @@ public class HeapFile implements DbFile {
             
             // if the offset exceeds the file length
             if (offset < 0 || offset >= this.file.length()) {
-                throw new Exception("Page does not exist");
+                throw new IllegalArgumentException("Page does not exist");
             }
             
             raf.seek(offset);
@@ -91,9 +96,10 @@ public class HeapFile implements DbFile {
 
             return new HeapPage((HeapPageId) pid, data);
             
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        	throw new IllegalArgumentException("Page does not exist");
+        }
         
-        return null;
     }
 
     // see DbFile.java for javadocs
